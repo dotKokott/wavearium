@@ -1,4 +1,8 @@
 <script lang="ts">
+	import * as Tone from 'tone';
+
+
+
 	export let name: string;
 
 	let list = [
@@ -18,6 +22,9 @@
 
 	function setName(newName: string) {
 		name = newName;
+
+		const synth = new Tone.Synth().toDestination();
+		synth.triggerAttackRelease("C4", "8n");
 	}
 
 	// computed
