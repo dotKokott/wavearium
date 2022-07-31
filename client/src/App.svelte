@@ -1,66 +1,49 @@
 <script lang="ts">
+import { onMount } from 'svelte';
 	import * as Tone from 'tone';
 
+	export let osc = new Tone.Oscillator("F3").toDestination();
 
+	export let analyser = new Tone.Analyser("waveform", 256);
+	
+	export let partialCount = 8;
+	export let frequency = 440;
 
-	export let name: string;
+	onMount(() => {
 
-	let list = [
-		{
-			name: "John",
-			age: 30
-		},
-		{
-			name: "Jane",
-			age: 25
-		},
-		{
-			name: "Bob",
-			age: 20
-		}
-	];
+	});
 
-	function setName(newName: string) {
-		name = newName;
-
-		const synth = new Tone.Synth().toDestination();
-		synth.triggerAttackRelease("C4", "8n");
+	function playTone() {
+		osc.partials = new Array(partialCount).fill(0).map(() => Math.random());
+		osc.frequency.value = frequency;
+		
+		// start and stop after 1 second
+		osc.start().stop("+1");		
 	}
+		
 
 	// computed
 	// $: doubled = count * 2
 
 	// watch
 	// $: if(count % 2 == 0) { console.log(' do something ') }
-
-
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-	<button on:click={() => setName('chango')}>Change name</button>
+	<h1>Synthesizer</h1>	
+	
+	<div>
+		Frequency: { frequency }
+		<input bind:value={frequency} type="range" min="20" max="1000" on:change={ playTone }/>
+	</div>
+	<div>				
+		Partial count: { partialCount }
+		<input bind:value={partialCount} type="range" min="1" max="128" on:change={ playTone }/>
+		
+	</div>
 
-	{#if name != 'world'}
-		<p>{name} is not world</p>
-	{/if}
-
-	<ul>
-		{#each list as person, i}
-			<li>{person.name} is {person.age} years old</li>
-		{/each}
-	</ul>
-
-	<!--
-		{#await promise}
-			<p>...waiting</p>
-		{:then number}
-			<p>The number is {number}</p>
-		{:catch error}
-			<p style="color: red">{error.message}</p>
-		{/await}		
-	-->
-
+	<button on:click={() => playTone()}>Play sound</button>
+	
 </main>
 
 <style>
