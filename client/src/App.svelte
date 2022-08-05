@@ -1,13 +1,12 @@
 <script lang="ts">
-import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import * as Tone from 'tone';
+	import Waveform from './components/waveform.svelte';
 
 	export let osc = new Tone.Oscillator("F3").toDestination();
-
-	export let analyser = new Tone.Analyser("waveform", 256);
 	
-	export let partialCount = 8;
-	export let frequency = 440;
+	export let partialCount = 1;
+	export let frequency = 220;
 
 	onMount(() => {
 
@@ -18,40 +17,43 @@ import { onMount } from 'svelte';
 		osc.frequency.value = frequency;
 		
 		// start and stop after 1 second
-		osc.start().stop("+1");		
+		osc.start().stop("+2");		
 	}
 		
-
 	// computed
 	// $: doubled = count * 2
 
 	// watch
 	// $: if(count % 2 == 0) { console.log(' do something ') }
 </script>
-
 <main>
 	<h1>Synthesizer</h1>	
 	
 	<div>
 		Frequency: { frequency }
-		<input bind:value={frequency} type="range" min="20" max="1000" on:change={ playTone }/>
+		<input bind:value={frequency} type="range" min="20" max="2000" on:change={ playTone }/>
 	</div>
 	<div>				
 		Partial count: { partialCount }
-		<input bind:value={partialCount} type="range" min="1" max="128" on:change={ playTone }/>
-		
+		<input bind:value={partialCount} type="range" min="1" max="128" on:change={ playTone }/>		
 	</div>
 
 	<button on:click={() => playTone()}>Play sound</button>
 	
+	<div>
+		<Waveform audioNode={osc} width={1024} height={1024 / 2}></Waveform>
+	</div>
 </main>
 
 <style>
 	main {
+		/* TODO: I do not know where the 43px top margin is coming from */
+		margin-top: -43px;
+		background-color: black;
+		color: white;
+		height: 100%;
 		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
+		/* margin: 0 auto; */
 	}
 
 	h1 {
