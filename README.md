@@ -6,8 +6,8 @@ WaveEdit like wavetable editor for viewing, searching, creating and collecting o
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
-- Display partial settings
-- Editable partial settings
+- More beautiful partial settings (find svelte UI toolkit)
+- Keyboard input for notes
 - Waveform <-> partial research
 - Calculate standing wave just from partials
 
