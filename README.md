@@ -6,8 +6,9 @@ WaveEdit like wavetable editor for viewing, searching, creating and collecting o
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
+- Understand piano css
+- Implement waveform drawing from the UI examples
 - More beautiful partial settings (find svelte UI toolkit)
-- Keyboard input for notes
 - Waveform <-> partial research
 - Calculate standing wave just from partials
 
@@ -24,3 +25,5 @@ document.querySelector('button')?.addEventListener('click', async () => {
 - [Tone.Oscillator has a partials attribute](https://tonejs.github.io/docs/14.7.77/Oscillator.html#partials) that can be used to create wavetable synth
 
 - We use Tone.Waveform for now to display the waveform of an audionode. This should be replaced by actually drawing the calculated standing waveform.
+
+- How to draw waveform from oscillator: https://github.com/Tonejs/ui/blob/master/src/gui/vis/vis-base.ts#L34
