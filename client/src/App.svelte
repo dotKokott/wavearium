@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as Tone from 'tone';
+import Keyboard from './components/keyboard.svelte';
 	import PartialsEditor from './components/partialsEditor.svelte';
 	import Waveform from './components/waveform.svelte';
 
@@ -53,6 +54,9 @@
 	
 	<div>
 		<PartialsEditor oscillator={osc} on:partialsChanged={ playTone } />
+	</div>
+	<div>
+		<Keyboard osc={osc} />
 	</div>
 	<div>
 		<Waveform audioNode={osc} width={1024} height={1024 / 2}></Waveform>
