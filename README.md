@@ -2,6 +2,9 @@
 WaveEdit like wavetable editor for viewing, searching, creating and collecting of wavetables. Focusing on the Piston Honda MKIII format for now.
 
 
+## How to develop
+Run `npm run dev` in client folder
+
 ## Technology decision
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
