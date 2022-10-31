@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as Tone from 'tone';
-import Keyboard from './components/keyboard.svelte';
+	import Keyboard from './components/keyboard.svelte';
 	import PartialsEditor from './components/partialsEditor.svelte';
 	import Waveform from './components/waveform.svelte';
 
@@ -10,13 +10,14 @@ import Keyboard from './components/keyboard.svelte';
 	export let partialCount = 2;
 	export let frequency = 220;
 
-	onMount(() => {
-		osc.partials = Array.from({length: partialCount}, () => 1);		
+	onMount(async () => {
+		setTimeout(() => {
+			//TODO: Why do we need to wait 100ms to make sure the partials watch works in waveform component?
+			osc.partials = Array.from({length: partialCount}, () => 1);			
+		}, 100)		
 	});
-
 	
-	function playTone() {		
-		
+	function playTone() {				
 		osc.frequency.value = frequency;	
 		osc.stop();
 		osc.start();		

@@ -1,27 +1,18 @@
 <script lang=ts>
     import { onMount } from 'svelte';    
     import * as Tone from 'tone';
+    import { scale } from '../lib/utils';
 
     export let width = 512;
     export let height = 256;
     export let normalizeCurve = true;
 
-    export let audioNode : Tone.Oscillator;
-
-    const fftSize = 256;    
+    export let audioNode : Tone.Oscillator;    
 
     let canvas = null;
     let ctx = null;
-
-    function scale(
-		v: number,
-		inMin: number,
-		inMax: number,
-		outMin: number,
-		outMax: number
-	): number {
-		return ((v - inMin) / (inMax - inMin)) * (outMax - outMin) + outMin;
-	}
+    
+    $: audioNode.partials, redrawWaveform();
 
     onMount(() => {        
         canvas = document.getElementById('waveform');
@@ -30,9 +21,7 @@
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';        
 
-        ctx = canvas.getContext('2d');
-
-        draw();
+        ctx = canvas.getContext('2d');        
     });
 
     function drawWavetable(values : Float32Array) {
@@ -83,14 +72,11 @@
         ctx.stroke();		      
     }
 
-
-    async function draw() {
-        requestAnimationFrame(draw);        
-
+    async function redrawWaveform() {
         // TODO: Understand why 1024 in this case is like the resolution rather than sample size
         const values = await audioNode.asArray(1024);
 
-        drawWavetable(values);         
+        drawWavetable(values);       
     }
 </script>
 
