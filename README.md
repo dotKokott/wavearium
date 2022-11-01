@@ -9,11 +9,9 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
-- Understand drawWaveform function better
-- Implement waveform drawing
 - Implement .wav loading!
 - Waveform <-> partial research
-
+- Implement waveform drawing
 - More beautiful partial settings (find svelte UI toolkit)
 - Understand piano css
 

@@ -18,7 +18,7 @@
         <div class="partial">
             <div class="partial_label">{`${index}: ${partial.toString().substring(0, 4)}`}</div>
             <div class="partial_slider">
-                <input type="range" min="0" max="1" step="0.01" value="{partial}" on:change={(e) => {
+                <input type="range" min="0" max="1" step="0.01" value="{partial}" on:input={(e) => {
                     // TODO: How to get rid of error value does not exist, event typing?                 
                     changePartial(index, e.target.value);
                 }} />

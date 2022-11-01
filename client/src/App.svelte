@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import * as Tone from 'tone';
+	import * as Tone from 'tone';	
 	import Keyboard from './components/keyboard.svelte';
 	import PartialsEditor from './components/partialsEditor.svelte';
 	import Waveform from './components/waveform.svelte';
@@ -19,8 +19,12 @@
 	
 	function playTone() {				
 		osc.frequency.value = frequency;	
-		osc.stop();
-		osc.start();		
+		
+		if(osc.state !== "started") {
+			osc.start();		
+		}
+		// osc.stop();
+		// 
 	}
 
 	function randomizePartials() {
@@ -42,11 +46,11 @@
 	
 	<div>
 		Frequency: { frequency }
-		<input bind:value={frequency} type="range" min="20" max="2000" on:change={ playTone }/>
+		<input bind:value={frequency} type="range" min="20" max="2000" on:input={ playTone }/>
 	</div>
 	<div>				
 		Partial count: { partialCount }
-		<input bind:value={ partialCount } type="range" min="1" max="128" on:change={ updateOscPartials }/>		
+		<input bind:value={ partialCount } type="range" min="1" max="128" on:input={ updateOscPartials }/>		
 	</div>
 
 	<button on:click={() => playTone()}>Play</button>
