@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+  import { is_client } from 'svelte/internal';
 	import * as Tone from 'tone';	
 	import Keyboard from './components/keyboard.svelte';
 	import PartialsEditor from './components/partialsEditor.svelte';
 	import Waveform from './components/waveform.svelte';
 
-	export let osc = new Tone.Oscillator("F3").toDestination();
+	export let osc = new Tone.Oscillator(440, 'sine').toDestination();
 	
 	export let partialCount = 2;
 	export let frequency = 220;
@@ -13,8 +14,14 @@
 	onMount(async () => {
 		setTimeout(() => {
 			//TODO: Why do we need to wait 100ms to make sure the partials watch works in waveform component?
-			osc.partials = Array.from({length: partialCount}, () => 1);			
+			osc.partials = Array.from({length: partialCount}, () => 1);	
+			const osc2 = new Tone.ToneOscillatorNode
+			const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
+				const buf = buffer.get();
+			})			
 		}, 100)		
+
+
 	});
 	
 	function playTone() {				

@@ -9,8 +9,8 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
-- Implement .wav loading!
-- Waveform <-> partial research
+- How to turn .wav file into partials / custom oscillator?
+	- ctx.createPeriodicWave?
 - Implement waveform drawing
 - More beautiful partial settings (find svelte UI toolkit)
 - Understand piano css
@@ -30,3 +30,5 @@ document.querySelector('button')?.addEventListener('click', async () => {
 - How to draw waveform from oscillator: https://github.com/Tonejs/ui/blob/master/src/gui/vis/vis-base.ts#L34
 
 - We are using Oscillator.asArray(resolution) to get the wave values right now, we have to see how this translates to waveform .wav files.
+
+- A waveedit / piston honda wavetable .wav file is 64 waves * 256 samples per wave
