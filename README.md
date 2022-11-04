@@ -9,9 +9,14 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
+<<<<<<< HEAD
 - Look into WebAudio how their custom oscillator works
 - How to turn .wav file into partials / custom oscillator?
 	- ctx.createPeriodicWave?
+=======
+- How to turn buffer slice into partials / custom oscillator?
+	- ctx.createPeriodicWave / FFT?
+>>>>>>> d56ab9f5abd04461db3a7625bce28d70e53158da
 - Implement waveform drawing
 - More beautiful partial settings (find svelte UI toolkit)
 - Understand piano css

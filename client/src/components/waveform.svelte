@@ -24,6 +24,14 @@
         canvas.style.height = height + 'px';        
 
         ctx = canvas.getContext('2d');        
+
+        const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
+			const buf = buffer.get();
+            const index = 2;
+            // TODO: This kind of works but we need to understand why the buffer size is not what we expect
+            const sliceLength = buf.length / 64;            
+            drawWavetable(buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength));
+        })	        
     });
 
     function drawWavetable(values : Float32Array) {
@@ -73,10 +81,10 @@
     }
 
     async function redrawWaveform() {
-        // TODO: Understand why 1024 in this case is like the resolution rather than sample size
-        const values = await audioNode.asArray(resolution);
+        // // TODO: Understand why 1024 in this case is like the resolution rather than sample size
+        // const values = await audioNode.asArray(resolution);
 
-        drawWavetable(values);       
+        // drawWavetable(values);       
     }
 </script>
 
