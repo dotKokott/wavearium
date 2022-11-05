@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';    
     import * as Tone from 'tone';
     import { scale } from '../lib/utils';
+    import * as FFT from 'fft-js';
 
     export let width = 512;
     export let height = 256;
@@ -23,13 +24,18 @@
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';        
 
-        ctx = canvas.getContext('2d');        
+        ctx = canvas.getContext('2d');                
 
         const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
 			const buf = buffer.get();
             const index = 2;
             // TODO: This kind of works but we need to understand why the buffer size is not what we expect
             const sliceLength = buf.length / 64;            
+
+            const fft = FFT.fft;
+            console.log(fft);
+
+
             drawWavetable(buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength));
         })	        
     });
