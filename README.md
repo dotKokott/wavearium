@@ -9,10 +9,7 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
-- Look into WebAudio how their custom oscillator works
-- Find out how to turn buffer into periodicWave with Real and Img values
-- How to turn .wav file into partials / custom oscillator?
-	- ctx.createPeriodicWave?
+- Find FFT library that can give us real + img for arbitrary size of FLOAT32Array
 - Load wavetable .json from https://github.com/GoogleChromeLabs/web-audio-samples/tree/main/src/demos/wavetable-synth/wave-tables
 - Implement waveform drawing
 - More beautiful partial settings (find svelte UI toolkit)
@@ -45,5 +42,7 @@ document.querySelector('button')?.addEventListener('click', async () => {
 	1. Slice the wav file into the individual waveforms, which are PCM data, which basically means list of amplitudes, which can be called the **signal**
 	2. Do an FFT in order to get the sine and cosine coefficients of the signal, also called real and imaginary values of the periodic waveform
 	3. With the real and img values we can then create a custom oscillator
+
+- fft-js does not work for our purposes
 
 

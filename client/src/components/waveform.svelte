@@ -15,6 +15,10 @@
     let canvas = null;
     let ctx = null;
     
+    let fft;
+    let currentBuffer;
+    let fftResult;
+
     $: audioNode.partials, redrawWaveform();
 
     onMount(() => {        
@@ -26,17 +30,18 @@
 
         ctx = canvas.getContext('2d');                
 
+        fft = FFT.fft;
         const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
 			const buf = buffer.get();
             const index = 2;
             // TODO: This kind of works but we need to understand why the buffer size is not what we expect
-            const sliceLength = buf.length / 64;            
-
-            const fft = FFT.fft;
-            console.log(fft);
-
-
-            drawWavetable(buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength));
+            const sliceLength = buf.length / 64;                                
+            currentBuffer = buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength)
+            
+            const signal = [1,0,1,0];
+            fftResult = fft(signal);
+            console.log(currentBuffer.length);
+            drawWavetable(currentBuffer);
         })	        
     });
 
@@ -96,6 +101,9 @@
 
 <div class="canvas_wrapper">
     <canvas id="waveform" width="{width}" height="{height}"></canvas>
+    <pre>
+        {fftResult}
+    </pre>
 </div>
 
 <style>
