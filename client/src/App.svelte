@@ -14,14 +14,8 @@
 	onMount(async () => {
 		setTimeout(() => {
 			//TODO: Why do we need to wait 100ms to make sure the partials watch works in waveform component?
-			osc.partials = Array.from({length: partialCount}, () => 1);	
-			const osc2 = new Tone.ToneOscillatorNode
-			const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
-				const buf = buffer.get();
-			})			
+			osc.partials = Array.from({length: partialCount}, () => 1);					
 		}, 100)		
-
-
 	});
 	
 	function playTone() {				

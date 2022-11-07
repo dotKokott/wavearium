@@ -2,7 +2,9 @@
     import { onMount } from 'svelte';    
     import * as Tone from 'tone';
     import { scale } from '../lib/utils';
-    import * as FFT from 'fft-js';
+    import FFT from 'fft.js';
+  
+    
 
     export let width = 512;
     export let height = 256;
@@ -15,7 +17,7 @@
     let canvas = null;
     let ctx = null;
     
-    let fft;
+    
     let currentBuffer;
     let fftResult;
 
@@ -28,19 +30,60 @@
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';        
 
-        ctx = canvas.getContext('2d');                
+        ctx = canvas.getContext('2d');                            
+        
 
-        fft = FFT.fft;
+    
+
+
         const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
 			const buf = buffer.get();
             const index = 2;
             // TODO: This kind of works but we need to understand why the buffer size is not what we expect
-            const sliceLength = buf.length / 64;                                
+            const sliceLength = buf.length / 64;                                            
             currentBuffer = buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength)
             
-            const signal = [1,0,1,0];
-            fftResult = fft(signal);
-            console.log(currentBuffer.length);
+            const size = 1024 * 2;
+            
+            const f = new FFT(size);
+
+            const input = new Array(size);
+            input.fill(0);
+            currentBuffer.forEach((v, i) => {
+                input[i] = v;
+            });
+            
+
+            const inputComplex = f.createComplexArray();
+
+            f.toComplexArray(input, inputComplex);            
+            
+            const outputComplex = f.createComplexArray();
+
+            f.transform(outputComplex, inputComplex);
+
+            const realPart = outputComplex.map((v, i) => {
+                if(i % 2 === 0) {
+                    return v;
+                }
+            }).filter(v => v !== undefined);
+
+            const imgPart = outputComplex.map((v, i) => {
+                if(i % 2 !== 0) {
+                    return v;
+                }
+            }).filter(v => v !== undefined);
+
+            console.log(realPart);
+
+            const wave = Tone.context.createPeriodicWave(realPart, imgPart);
+
+            console.log(wave);
+
+            // fft = KissFFT.FFTR(currentBuffer.length)
+            // const transform = fftResult.forward(currentBuffer);
+            
+            // console.log(transform);
             drawWavetable(currentBuffer);
         })	        
     });
@@ -102,7 +145,7 @@
 <div class="canvas_wrapper">
     <canvas id="waveform" width="{width}" height="{height}"></canvas>
     <pre>
-        {fftResult}
+        
     </pre>
 </div>
 
