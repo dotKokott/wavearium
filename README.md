@@ -9,7 +9,8 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
-- Find FFT library that can give us real + img for arbitrary size of FLOAT32Array
+- We have periodicWave now (apparently). Can we create a Tone.Oscillator from it?
+- See if fft.js suits our purposes (power of 2 buffer issue, but our buffers are 256 so not sure why they are so big)
 - Load wavetable .json from https://github.com/GoogleChromeLabs/web-audio-samples/tree/main/src/demos/wavetable-synth/wave-tables
 - Implement waveform drawing
 - More beautiful partial settings (find svelte UI toolkit)
@@ -45,4 +46,8 @@ document.querySelector('button')?.addEventListener('click', async () => {
 
 - fft-js does not work for our purposes
 
+- fft.js seems to give us the complex numbers we need
 
+	- but it wants the input power of two, can we just scale it up and fill with zeros?
+
+- I would really like to understand how to make old JS libs work in TS
