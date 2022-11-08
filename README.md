@@ -9,6 +9,9 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
+- Check this out: https://github.com/Tonejs/Tone.js/blob/c313bc6/Tone/source/oscillator/Oscillator.ts#L315
+
+	- Real and img can be calculated easily from partials
 - Why are our buffers so big as opposed to 256?
 - Implement custom oscillator creation cleanly
 - Does partials reflect the actual partials after the set the wave?
