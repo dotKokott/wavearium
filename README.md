@@ -9,9 +9,12 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
-- We have periodicWave now (apparently). Can we create a Tone.Oscillator from it?
-- See if fft.js suits our purposes (power of 2 buffer issue, but our buffers are 256 so not sure why they are so big)
-- Load wavetable .json from https://github.com/GoogleChromeLabs/web-audio-samples/tree/main/src/demos/wavetable-synth/wave-tables
+- Why are our buffers so big as opposed to 256?
+- Implement custom oscillator creation cleanly
+- Does partials reflect the actual partials after the set the wave?
+- Why can't we set type to 'custom' for the ToneOscillatorNode
+- Figure out wave -> partial -> wave <-> partial, something about the phasors and inverseFFT I suspect
+- optional Load wavetable .json from https://github.com/GoogleChromeLabs/web-audio-samples/tree/main/src/demos/wavetable-synth/wave-tables
 - Implement waveform drawing
 - More beautiful partial settings (find svelte UI toolkit)
 - Understand piano css
@@ -20,6 +23,8 @@ Run `npm run dev` in client folder
 - Wavetable synth from scratch in Rust and WebAssembly: https://cprimozic.net/blog/buliding-a-wavetable-synthesizer-with-rust-wasm-and-webaudio/#demo
 - https://github.com/corbanbrook/dsp.js DSP library containing FFT and IFFT
 - https://github.com/moonchanyong/typefft TS FFT library
+- Current tone.js docs https://tonejs.github.io/docs/14.7.77/index.html
+
 ### Learnings
 - WebAudio is only allowed to create sound following a user interaction. Therefore a button 
 ```js
@@ -44,10 +49,10 @@ document.querySelector('button')?.addEventListener('click', async () => {
 	2. Do an FFT in order to get the sine and cosine coefficients of the signal, also called real and imaginary values of the periodic waveform
 	3. With the real and img values we can then create a custom oscillator
 
-- fft-js does not work for our purposes
-
 - fft.js seems to give us the complex numbers we need
 
-	- but it wants the input power of two, can we just scale it up and fill with zeros?
+	- but it wants the input power of two, can we just scale it up and fill with zeros?	
 
 - I would really like to understand how to make old JS libs work in TS
+
+
