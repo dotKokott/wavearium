@@ -9,6 +9,7 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
+- Started working on CustomOscillator but we might want to override Oscillator instead of OscillatorNode because it does not have things like asArray and partials
 - Check this out: https://github.com/Tonejs/Tone.js/blob/c313bc6/Tone/source/oscillator/Oscillator.ts#L315
 
 	- Real and img can be calculated easily from partials

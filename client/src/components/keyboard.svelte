@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import type { Oscillator } from 'tone';
+    import type { OscillatorNode } from 'tone';
     import type { Frequency } from 'tone/build/esm/core/type/Units';
     
-    export let osc : Oscillator;
+    export let osc : OscillatorNode;
 
     function playNote(frequency : Frequency) {
         osc.frequency.value = frequency;

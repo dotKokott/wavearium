@@ -12,7 +12,7 @@
     export let lineWidth = 2;
     export let resolution = 1024;
 
-    export let audioNode : Tone.Oscillator;  
+    export let audioNode : Tone.ToneOscillatorNode;  
     
     let oscillatorNode : Tone.ToneOscillatorNode;
 
@@ -23,7 +23,7 @@
     let currentBuffer;
     let fftResult;
 
-    $: audioNode.partials, redrawWaveform();
+    //$: audioNode.partials, redrawWaveform();
 
     onMount(() => {        
         canvas = document.getElementById('waveform');
@@ -33,59 +33,6 @@
         canvas.style.height = height + 'px';        
 
         ctx = canvas.getContext('2d');                            
-
-        const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
-			const buf = buffer.get();
-            const index = 0;
-            // TODO: This kind of works but we need to understand why the buffer size is not what we expect
-            const sliceLength = buf.length / 64;                                            
-            currentBuffer = buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength)
-            
-            const size = 1024 * 2;
-            
-            const f = new FFT(size);
-
-            const input = new Array(size);
-            input.fill(0);
-            currentBuffer.forEach((v, i) => {
-                input[i] = v;
-            });
-            
-
-            const inputComplex = f.createComplexArray();
-
-            f.toComplexArray(input, inputComplex);            
-            
-            const outputComplex = f.createComplexArray();
-
-            f.transform(outputComplex, inputComplex);
-
-            const realPart = outputComplex.map((v, i) => {
-                if(i % 2 === 0) {
-                    return v;
-                }
-            }).filter(v => v !== undefined);
-
-            const imgPart = outputComplex.map((v, i) => {
-                if(i % 2 !== 0) {
-                    return v;
-                }
-            }).filter(v => v !== undefined);            
-
-            const wave = Tone.context.createPeriodicWave(realPart, imgPart);
-            
-            const oscillatorNode = new Tone.ToneOscillatorNode(220, 'sine').toDestination();
-
-
-            oscillatorNode.setPeriodicWave(wave);
-            oscillatorNode.start();
-
-            // fft = KissFFT.FFTR(currentBuffer.length)
-            // const transform = fftResult.forward(currentBuffer);
-            
-            // console.log(transform);
-            drawWavetable(currentBuffer);
-        })	        
     });
 
     function drawWavetable(values : Float32Array) {
@@ -136,9 +83,9 @@
 
     async function redrawWaveform() {
         // // TODO: Understand why 1024 in this case is like the resolution rather than sample size
-        // const values = await audioNode.asArray(resolution);
+        const values = await audioNode.asArray(resolution);
 
-        // drawWavetable(values);       
+        drawWavetable(values);       
     }
 </script>
 
