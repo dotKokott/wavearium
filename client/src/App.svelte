@@ -75,7 +75,7 @@
 	</div>
 
 	<button on:click={() => playTone()}>Play</button>
-	<button on:click={() => osc.stop()}>Stop</button>
+	<button on:click={() => customOscillator.OscillatorNode.stop()}>Stop</button>
 	<button on:click={ randomizePartials }>Randomize partials</button>
 	
 	<div>
