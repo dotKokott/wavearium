@@ -22,19 +22,22 @@
 
 			const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
 				const buf = buffer.get();
-				const index = 0;
+				const index = 2;
 				// TODO: This kind of works but we need to understand why the buffer size is not what we expect
 				const sliceLength = buf.length / 64;                                            
 				const currentBuffer = buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength)
 				
 				customOscillator = new CustomOscillator(currentBuffer, frequency);
+				customOscillator.OscillatorNode.toDestination();				
 			});			
 			
 		}, 100)		
 	});
 	
-	function playTone() {				
+	function playTone() {					
 		customOscillator.OscillatorNode.frequency.value = frequency;
+
+		console.log(customOscillator.OscillatorNode.state);
 
 		if(customOscillator.OscillatorNode.state !== "started") {
 			customOscillator.OscillatorNode.start();
@@ -82,10 +85,10 @@
 		<PartialsEditor oscillator={osc} on:partialsChanged={ playTone } />
 	</div>
 	<div>
-		<Keyboard osc={osc} />
+		<Keyboard osc={customOscillator?.OscillatorNode} />
 	</div>
 	<div>
-		<Waveform audioNode={osc} width={1024} height={1024 / 2}></Waveform>
+		<!-- <Waveform audioNode={osc} width={1024} height={1024 / 2}></Waveform> -->
 	</div>
 </main>
 
