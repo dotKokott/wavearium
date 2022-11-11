@@ -24,6 +24,10 @@
             stopNote();
         }); 
         
+        document.addEventListener("keyup", e => {
+            stopNote();
+        });
+
         document.addEventListener("keydown", e => {
             // e object has the key property to tell which key was pressed
             switch (e.key) {

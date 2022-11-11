@@ -19,7 +19,7 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 
 
     private _wave?: PeriodicWave;
-    private _partials: number[];
+    private _partials: number[] = [];
 	get partials(): number[] {
 		return this._partials.slice(0, this.partialCount);
 	}    
@@ -54,7 +54,9 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
     
     private _fft = null;
 
-    private bufferComplex;    
+    get buffer() {
+        return this._buffer;
+    }
     set buffer(buffer: Float32Array) {
         this._bufferSize = Math.pow(2, Math.ceil(Math.log2(buffer.length)));
         this._buffer = new Float32Array(this._bufferSize);
@@ -184,8 +186,10 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 		return this;
     }       
     
-    asArray(length: number): Promise<Float32Array> {
-        return generateWaveform(this, length);
+    asArray(length: number) : Promise<Float32Array> {
+        return new Promise((resolve, reject) => {
+            resolve(this._buffer.slice(0, length));
+        });        
     }    
 
 	dispose(): this {

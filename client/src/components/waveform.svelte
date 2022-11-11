@@ -3,6 +3,7 @@
     import * as Tone from 'tone';
     import { scale } from '../lib/utils';
     import FFT from 'fft.js';
+    import type { BufferOscillator } from '../lib/BufferOscillator';
   
     
 
@@ -12,9 +13,7 @@
     export let lineWidth = 2;
     export let resolution = 1024;
 
-    export let audioNode : Tone.ToneOscillatorNode;  
-    
-    let oscillatorNode : Tone.ToneOscillatorNode;
+    export let oscillator : BufferOscillator;      
 
     let canvas = null;
     let ctx = null;
@@ -22,8 +21,8 @@
     
     let currentBuffer;
     let fftResult;
-
-    //$: audioNode.partials, redrawWaveform();
+    
+    // $: oscillator, redrawWaveform();
 
     onMount(() => {        
         canvas = document.getElementById('waveform');
@@ -32,7 +31,11 @@
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';        
 
-        ctx = canvas.getContext('2d');                            
+        ctx = canvas.getContext('2d'); 
+        
+        setTimeout(() => {
+            redrawWaveform();
+        }, 1000);
     });
 
     function drawWavetable(values : Float32Array) {
@@ -83,7 +86,7 @@
 
     async function redrawWaveform() {
         // // TODO: Understand why 1024 in this case is like the resolution rather than sample size
-        const values = await audioNode.asArray(resolution);
+        const values = await oscillator.asArray(oscillator.buffer.length);
 
         drawWavetable(values);       
     }

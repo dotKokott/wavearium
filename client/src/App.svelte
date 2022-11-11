@@ -84,7 +84,7 @@
 		<Keyboard osc={bufferOscillator} />
 	</div>
 	<div>
-		<!-- <Waveform audioNode={osc} width={1024} height={1024 / 2}></Waveform> -->
+		<Waveform oscillator={bufferOscillator} width={1024} height={1024 / 2}></Waveform>
 	</div>
 </main>
 
