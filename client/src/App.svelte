@@ -5,12 +5,11 @@
 	import Keyboard from './components/keyboard.svelte';
 	import PartialsEditor from './components/partialsEditor.svelte';
 	import Waveform from './components/waveform.svelte';
-	import CustomOscillator from './lib/CustomOscillator';
+	import { BufferOscillator } from './lib/BufferOscillator';
 
 	export let osc = new Tone.Oscillator(440, 'sine').toDestination();
 
-	export let customOscillator : CustomOscillator;
-	export let osc2 : Tone.ToneOscillatorNode;
+	export let bufferOscillator : BufferOscillator = null;
 	
 	export let partialCount = 2;
 	export let frequency = 220;
@@ -26,21 +25,18 @@
 				// TODO: This kind of works but we need to understand why the buffer size is not what we expect
 				const sliceLength = buf.length / 64;                                            
 				const currentBuffer = buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength)
-				
-				customOscillator = new CustomOscillator(currentBuffer, frequency);
-				customOscillator.OscillatorNode.toDestination();				
+								
+				bufferOscillator = new BufferOscillator(currentBuffer).toDestination();								
 			});			
 			
 		}, 100)		
 	});
 	
 	function playTone() {					
-		customOscillator.OscillatorNode.frequency.value = frequency;
+		bufferOscillator.frequency.value = frequency;
 
-		console.log(customOscillator.OscillatorNode.state);
-
-		if(customOscillator.OscillatorNode.state !== "started") {
-			customOscillator.OscillatorNode.start();
+		if(bufferOscillator.state !== "started") {
+			bufferOscillator.start();
 		}
 
 		// osc.frequency.value = frequency;	
@@ -78,14 +74,14 @@
 	</div>
 
 	<button on:click={() => playTone()}>Play</button>
-	<button on:click={() => customOscillator.OscillatorNode.stop()}>Stop</button>
+	<button on:click={() => bufferOscillator.stop()}>Stop</button>
 	<button on:click={ randomizePartials }>Randomize partials</button>
 	
 	<div>
-		<PartialsEditor oscillator={osc} on:partialsChanged={ playTone } />
+		<!-- <PartialsEditor oscillator={bufferOscillator} on:partialsChanged={ playTone } /> -->
 	</div>
 	<div>
-		<Keyboard osc={customOscillator?.OscillatorNode} />
+		<Keyboard osc={bufferOscillator} />
 	</div>
 	<div>
 		<!-- <Waveform audioNode={osc} width={1024} height={1024 / 2}></Waveform> -->

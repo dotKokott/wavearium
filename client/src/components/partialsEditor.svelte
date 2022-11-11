@@ -2,8 +2,9 @@
     import { createEventDispatcher } from 'svelte';
     // TODO: How to get rid of this error?
     import { Oscillator } from 'tone';    
+  import type { ToneOscillatorInterface } from 'tone/build/esm/source/oscillator/OscillatorInterface';
 
-    export let oscillator : Oscillator;     
+    export let oscillator : ToneOscillatorInterface;     
     const dispatch = createEventDispatcher();   
     
     function changePartial(index : number, value : number) {    

@@ -9,13 +9,7 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
-- Look at Tone.js Oscillator to see how to start and stop it because right now we can only start it once
-
-	- Apparently its normal to need a new AudioContext Oscillator every time you restart it..
-	- Another option is to use gain nodes.
-
-- Started working on CustomOscillator but we might want to override Oscillator instead of OscillatorNode because it does not have things like asArray and partials
-
+- BufferOscillator.ts it is. Show the waveform from asArray()
 - Check this out: https://github.com/Tonejs/Tone.js/blob/c313bc6/Tone/source/oscillator/Oscillator.ts#L315
 
 	- Real and img can be calculated easily from partials
