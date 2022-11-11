@@ -51,6 +51,8 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 
     private _buffer : Float32Array;
     private _bufferSize = 0;
+
+    private _originalBufferSize = 0;
     
     private _fft = null;
 
@@ -58,6 +60,7 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         return this._buffer;
     }
     set buffer(buffer: Float32Array) {
+        this._originalBufferSize = buffer.length;        
         this._bufferSize = Math.pow(2, Math.ceil(Math.log2(buffer.length)));
         this._buffer = new Float32Array(this._bufferSize);
         this._buffer.set(buffer);        
@@ -67,12 +70,14 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         const bufferComplex = this._fft.createComplexArray();        
         this._fft.toComplexArray(this._buffer, bufferComplex);
 
-        const outputComplex = this._fft.createComplexArray();
+        let outputComplex = this._fft.createComplexArray();
 
         this._fft.transform(outputComplex, bufferComplex);
 
         const realPart = [];
         const imgPart = [];
+
+        outputComplex = outputComplex.slice(0, this._originalBufferSize);
 
         outputComplex.forEach((v, i) => {
             if(i % 2 === 0) {
@@ -188,7 +193,7 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
     
     asArray(length: number) : Promise<Float32Array> {
         return new Promise((resolve, reject) => {
-            resolve(this._buffer.slice(0, length));
+            resolve(this._buffer.slice(0, this._originalBufferSize));
         });        
     }    
 

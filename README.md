@@ -9,6 +9,11 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
+- Find out why we can only create sine right now
+- Actually play the clean sine wave
+
+	- Could be related to the issue that we have so many samples...
+
 - Draw the right amount of waveform
 - Check this out: https://github.com/Tonejs/Tone.js/blob/c313bc6/Tone/source/oscillator/Oscillator.ts#L315
 
