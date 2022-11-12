@@ -1,6 +1,6 @@
 import { optionsFromArguments, Oscillator, Signal, ToneOscillatorNode, ToneOscillatorType, Unit } from 'tone';
 import type { Degrees, Frequency, Radians } from 'tone/build/esm/core/type/Units';
-import { ExtendedToneOscillatorType, ToneOscillatorInterface, ToneOscillatorOptions, generateWaveform } from 'tone/build/esm/source/oscillator/OscillatorInterface';
+import type { ExtendedToneOscillatorType, ToneOscillatorInterface, ToneOscillatorOptions, generateWaveform } from 'tone/build/esm/source/oscillator/OscillatorInterface';
 import { Source } from 'tone/build/esm/source/Source';
 
 import FFT from 'fft.js';
@@ -56,14 +56,17 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
     
     private _fft = null;
 
+    private _inverse : Float32Array;
+
     get buffer() {
         return this._buffer;
     }
     set buffer(buffer: Float32Array) {
-        this._originalBufferSize = buffer.length;        
+        
         this._bufferSize = Math.pow(2, Math.ceil(Math.log2(buffer.length)));
+        this._originalBufferSize = this._bufferSize;        
         this._buffer = new Float32Array(this._bufferSize);
-        this._buffer.set(buffer);        
+        this._buffer.set(buffer);                
 
         this._fft = new FFT(this._bufferSize);
 
@@ -72,12 +75,12 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 
         let outputComplex = this._fft.createComplexArray();
 
-        this._fft.transform(outputComplex, bufferComplex);
-
+        this._fft.realTransform(outputComplex, bufferComplex);
+        
         const realPart = [];
         const imgPart = [];
 
-        outputComplex = outputComplex.slice(0, this._originalBufferSize);
+        // outputComplex = outputComplex.slice(0, this._originalBufferSize);
 
         outputComplex.forEach((v, i) => {
             if(i % 2 === 0) {
@@ -86,6 +89,20 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
                 imgPart.push(v);
             }
         })
+
+		const _inverseComplex = this._fft.createComplexArray();
+        this._fft.inverseTransform(_inverseComplex, outputComplex);   
+        
+        this._inverse = new Float32Array(this._bufferSize);
+
+        _inverseComplex.forEach((v, i) => {
+            if(i % 2 === 0) {
+                this._inverse[i] = v;
+            }            
+        })
+        
+        console.log(this._inverse);
+
 
         this._wave = this.context.createPeriodicWave(realPart, imgPart);        
     }
@@ -194,7 +211,10 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
     asArray(length: number) : Promise<Float32Array> {
         return new Promise((resolve, reject) => {
             resolve(this._buffer.slice(0, this._originalBufferSize));
-        });        
+            
+        });    
+        
+        
     }    
 
 	dispose(): this {

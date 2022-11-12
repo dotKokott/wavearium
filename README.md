@@ -64,4 +64,7 @@ document.querySelector('button')?.addEventListener('click', async () => {
 
 - I would really like to understand how to make old JS libs work in TS
 
+- Our files are 10.000 Hz sample rate and 16 bit per sample
+- WebAudio resamples the file to its own sample rate: 48.000
+
 

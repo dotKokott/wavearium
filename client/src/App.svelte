@@ -5,6 +5,7 @@
 	import Keyboard from './components/keyboard.svelte';
 	import PartialsEditor from './components/partialsEditor.svelte';
 	import Waveform from './components/waveform.svelte';
+	import OutputWaveform from './components/outputWaveform.svelte';
 	import { BufferOscillator } from './lib/BufferOscillator';
 
 	export let osc = new Tone.Oscillator(440, 'sine').toDestination();
@@ -14,18 +15,26 @@
 	export let partialCount = 2;
 	export let frequency = 220;
 
-	onMount(async () => {
+	onMount(async () => {		
 		setTimeout(() => {
 			//TODO: Why do we need to wait 100ms to make sure the partials watch works in waveform component?
 			osc.partials = Array.from({length: partialCount}, () => 1);		
 
 			const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
 				const buf = buffer.get();
-				const index = 2;
-				// TODO: This kind of works but we need to understand why the buffer size is not what we expect
+				const index = 0;				
+				
+				const originalSampleRate = 10_000;
+				const sampleRate = Tone.context.sampleRate;
+				const conversion = sampleRate / originalSampleRate;				
+				
+				// Our original buffers are 256 samples but because WebAudio resamples it at 48000
+				// we have annoying non-power of two buffer sizes.
 				const sliceLength = buf.length / 64;                                            
+				const originalSliceLength = sliceLength / conversion;
+				console.log(originalSliceLength);
 				const currentBuffer = buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength)
-								
+				Tone.context.decodeAudioData
 				bufferOscillator = new BufferOscillator(currentBuffer).toDestination();								
 			});			
 			
@@ -84,8 +93,12 @@
 		<Keyboard osc={bufferOscillator} />
 	</div>
 	<div>
+		<OutputWaveform node={bufferOscillator} width={1024} height={1024 / 2}></OutputWaveform>
+	</div>	
+	<div>
 		<Waveform oscillator={bufferOscillator} width={1024} height={1024 / 2}></Waveform>
 	</div>
+
 </main>
 
 <style>
