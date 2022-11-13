@@ -15,21 +15,31 @@
     
     let waveform : Tone.Waveform;
 
+    let draw = true;
+
     export let node : BufferOscillator;
     
     // $ oscillator, redrawWaveform();
 
-    onMount(() => {   
-        console.log("YO");     
+    onMount(() => {      
         canvas = document.getElementById('outputWaveform');
         canvas.width = width;
         canvas.height = height;
         canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';        
-
+        canvas.style.height = height + 'px';                
         ctx = canvas.getContext('2d');     
 
-        waveform = new Tone.Waveform(resolution);        
+
+        document.addEventListener("keydown", e => {
+            // e object has the key property to tell which key was pressed
+            switch (e.key) {
+                case "p":
+                    draw = !draw;
+                    break;
+            }
+        });
+
+        waveform = new Tone.Waveform(resolution);                
 
         redrawWaveform();
     });
@@ -83,12 +93,12 @@
     async function redrawWaveform() {
         requestAnimationFrame(redrawWaveform);
 
-        node?.connect(waveform);
-        const values = waveform.getValue();
-        
-        drawWavetable(values);       
+        node?.connect(waveform);  
+        if(draw) {                  
+            const values = waveform.getValue();
 
-       
+            drawWavetable(values);              
+        }        
     }
 </script>
 

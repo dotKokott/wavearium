@@ -9,19 +9,17 @@ Run `npm run dev` in client folder
 - For now we are going with svelte ts and will add a backend when it becomes necessary.
 
 ## Next challenges
-- Figure out why we have a dirty sine wave, draw the wave once and compare
-- Actually play the clean sine wave	
-- Draw the right amount of waveform
+- WE FUCKING GOT IT BABY, the clean wav loading I mean
+- Show partials of waveform
+- Create a nice way to switch between the different waveforms
+- Can we morph?
+- Figure out wave -> partial -> wave <-> partial, something about the phasors and inverseFFT I suspect
 - Check this out: https://github.com/Tonejs/Tone.js/blob/c313bc6/Tone/source/oscillator/Oscillator.ts#L315
 
 	- Real and img can be calculated easily from partials
 - Why are our buffers so big as opposed to 256?
-- Implement custom oscillator creation cleanly
-- Does partials reflect the actual partials after the set the wave?
 - Why can't we set type to 'custom' for the ToneOscillatorNode
-- Figure out wave -> partial -> wave <-> partial, something about the phasors and inverseFFT I suspect
 - optional Load wavetable .json from https://github.com/GoogleChromeLabs/web-audio-samples/tree/main/src/demos/wavetable-synth/wave-tables
-- Implement waveform drawing
 - More beautiful partial settings (find svelte UI toolkit)
 - Understand piano css
 

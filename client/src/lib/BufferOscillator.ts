@@ -68,6 +68,8 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         this._buffer = new Float32Array(this._bufferSize);
         this._buffer.set(buffer);                
 
+        const leftover = this._bufferSize - buffer.length;
+
         this._fft = new FFT(this._bufferSize);
 
         const bufferComplex = this._fft.createComplexArray();        
@@ -75,34 +77,42 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 
         let outputComplex = this._fft.createComplexArray();
 
-        this._fft.realTransform(outputComplex, bufferComplex);
+        this._fft.transform(outputComplex, bufferComplex);
         
-        const realPart = [];
-        const imgPart = [];
+        let realPart = [];
+        let imgPart = [];
 
         // outputComplex = outputComplex.slice(0, this._originalBufferSize);
-
+        
+        // DC offset?
+        
         outputComplex.forEach((v, i) => {
             if(i % 2 === 0) {
-                realPart.push(v);
+                realPart.push(v * -1);
             } else {
-                imgPart.push(v);
+                imgPart.push(v * -1);
             }
         })
+                
+        realPart = realPart.slice(0, 64);        
+        imgPart = imgPart.slice(0, 64);
 
-		const _inverseComplex = this._fft.createComplexArray();
-        this._fft.inverseTransform(_inverseComplex, outputComplex);   
+
+		// const _inverseComplex = this._fft.createComplexArray();
+        // this._fft.inverseTransform(_inverseComplex, outputComplex);   
         
-        this._inverse = new Float32Array(this._bufferSize);
+        // this._inverse = new Float32Array(this._bufferSize);
 
-        _inverseComplex.forEach((v, i) => {
-            if(i % 2 === 0) {
-                this._inverse[i] = v;
-            }            
-        })
-        
-        console.log(this._inverse);
+        // _inverseComplex.forEach((v, i) => {
+        //     if(i % 2 === 0) {
+        //         this._inverse[i] = v;
+        //     }            
+        // })
 
+        // realPart = realPart.slice(0, this._originalBufferSize / 2);
+        // imgPart = realPart.slice(0, this._originalBufferSize / 2);
+        console.log(realPart);
+        console.log(imgPart);
 
         this._wave = this.context.createPeriodicWave(realPart, imgPart);        
     }

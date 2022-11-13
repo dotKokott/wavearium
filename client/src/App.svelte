@@ -8,35 +8,64 @@
 	import OutputWaveform from './components/outputWaveform.svelte';
 	import { BufferOscillator } from './lib/BufferOscillator';
 
+	import { WaveFile } from 'wavefile';
+
 	export let osc = new Tone.Oscillator(440, 'sine').toDestination();
 
 	export let bufferOscillator : BufferOscillator = null;
 	
 	export let partialCount = 2;
-	export let frequency = 220;
+	export let frequency = 85;
 
 	onMount(async () => {		
 		setTimeout(() => {
 			//TODO: Why do we need to wait 100ms to make sure the partials watch works in waveform component?
 			osc.partials = Array.from({length: partialCount}, () => 1);		
 
-			const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
-				const buf = buffer.get();
-				const index = 0;				
+			fetch('./wave_files/piston_honda_mk3/1.wav')
+  				.then(async (response) => {
+					const buffer = await response.arrayBuffer();
+					
+					
+					const wavefile = new WaveFile(new Uint8Array(buffer));										
+					const floatBuffer = wavefile.getSamples(false);
+										
+					const index = 2;
+					const waveLength = 256;
+
+					// map PCM data to float array -1 to 1
+					const floatArray = new Float32Array(floatBuffer.length);
+					for (let i = 0; i < floatBuffer.length; i++) {
+						floatArray[i] = floatBuffer[i] / 32768;
+					}	
+					
+					// get a slice of the wave
+					//const wave = floatArray.slice(index * waveLength, (index + 1) * waveLength);
+					const wave = floatArray.slice(index * waveLength, (waveLength * index) + waveLength);
+					console.log(wave);
+					bufferOscillator = new BufferOscillator(wave).toDestination();	
+
 				
-				const originalSampleRate = 10_000;
-				const sampleRate = Tone.context.sampleRate;
-				const conversion = sampleRate / originalSampleRate;				
+				})
+			// wav.fromDataURI('./wave_files/piston_honda_mk3/1.wav');
+
+			// const buffer = new Tone.Buffer('./wave_files/piston_honda_mk3/1.wav', () => {
+			// 	const buf = buffer.get();
+			// 	const index = 1;				
 				
-				// Our original buffers are 256 samples but because WebAudio resamples it at 48000
-				// we have annoying non-power of two buffer sizes.
-				const sliceLength = buf.length / 64;                                            
-				const originalSliceLength = sliceLength / conversion;
-				console.log(originalSliceLength);
-				const currentBuffer = buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength)
-				Tone.context.decodeAudioData
-				bufferOscillator = new BufferOscillator(currentBuffer).toDestination();								
-			});			
+			// 	const originalSampleRate = 10_000;
+			// 	const sampleRate = Tone.context.sampleRate;
+			// 	const conversion = sampleRate / originalSampleRate;				
+				
+			// 	// Our original buffers are 256 samples but because WebAudio resamples it at 48000
+			// 	// we have annoying non-power of two buffer sizes.
+			// 	const sliceLength = buf.length / 64;                                            
+			// 	const originalSliceLength = sliceLength / conversion;
+			// 	console.log(originalSliceLength);
+			// 	const currentBuffer = buf.getChannelData(0).slice(sliceLength * index, (sliceLength * index) + sliceLength)
+			// 	Tone.context.decodeAudioData
+			// 	bufferOscillator = new BufferOscillator(currentBuffer).toDestination();								
+			// });			
 			
 		}, 100)		
 	});
