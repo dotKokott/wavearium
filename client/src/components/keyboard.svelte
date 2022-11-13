@@ -32,40 +32,40 @@
             // e object has the key property to tell which key was pressed
             switch (e.key) {
                 case "d":
-                    playNote("C4");
+                    playNote("C2");
                     break;
                 case "r":
-                    playNote("C#4");
+                    playNote("C#2");
                     break;                     
                 case "f":
-                    playNote("D4");
+                    playNote("D2");
                     break;  
                 case "t":
-                    playNote("D#4");
+                    playNote("D#2");
                     break;  
                 case "g":
-                    playNote("E4");
+                    playNote("E2");
                     break;  
                 case "h":
-                    playNote("F4");
+                    playNote("F2");
                     break;  
                 case "u":
-                    playNote("F#4");
+                    playNote("F#2");
                     break;  
                 case "j":
-                    playNote("G4");
+                    playNote("G2");
                     break;  
                 case "i":
-                    playNote("G#4");
+                    playNote("G#2");
                     break;  
                 case "k":
-                    playNote("A4");
+                    playNote("A2");
                     break;  
                 case "o":
-                    playNote("A#4");
+                    playNote("A#2");
                     break;  
                 case "l":
-                    playNote("B4");
+                    playNote("B2");
                     break;  
                 default:
                 return;
