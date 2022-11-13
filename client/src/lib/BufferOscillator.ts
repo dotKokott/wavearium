@@ -62,6 +62,7 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         return this._buffer;
     }
     set buffer(buffer: Float32Array) {
+        console.log(buffer.length)
         
         this._bufferSize = Math.pow(2, Math.ceil(Math.log2(buffer.length)));
         this._originalBufferSize = this._bufferSize;        
@@ -93,10 +94,14 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
                 imgPart.push(v * -1);
             }
         })
-                
-        realPart = realPart.slice(0, 64);        
-        imgPart = imgPart.slice(0, 64);
+               
+        // TODO: understand why this is still neccessary for a clean waveform
+        // realPart = realPart.slice(0, buffer.length / 2);
+        // imgPart = imgPart.slice(0, buffer.length / 2);
 
+        // this makes it even cleaner but at the cost of accuracy I assume
+        realPart = realPart.slice(0, 64);
+        imgPart = imgPart.slice(0, 64);
 
 		// const _inverseComplex = this._fft.createComplexArray();
         // this._fft.inverseTransform(_inverseComplex, outputComplex);   
@@ -110,9 +115,7 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         // })
 
         // realPart = realPart.slice(0, this._originalBufferSize / 2);
-        // imgPart = realPart.slice(0, this._originalBufferSize / 2);
-        console.log(realPart);
-        console.log(imgPart);
+
 
         this._wave = this.context.createPeriodicWave(realPart, imgPart);        
     }

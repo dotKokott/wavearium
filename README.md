@@ -10,6 +10,8 @@ Run `npm run dev` in client folder
 
 ## Next challenges
 - WE FUCKING GOT IT BABY, the clean wav loading I mean
+
+	- Oops: Almost, we have to truncate the FFT output because the end is not clean.. why
 - Show partials of waveform
 - Create a nice way to switch between the different waveforms
 - Can we morph?
