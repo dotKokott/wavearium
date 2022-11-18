@@ -1,19 +1,13 @@
 # wavearium
 WaveEdit like wavetable editor for viewing, searching, creating and collecting of wavetables. Focusing on the Piston Honda MKIII format for now.
 
-
 ## How to develop
 Run `npm run dev` in client folder
 
-## Technology decision
-- For now we are going with svelte ts and will add a backend when it becomes necessary.
-
 ## Next challenges
-- WE FUCKING GOT IT BABY, the clean wav loading I mean
-
-	- Oops: Almost, we have to truncate the FFT output because the end is not clean.. why
-- Show partials of waveform
-- Create a nice way to switch between the different waveforms
+- Partial editing feature
+- Waveform switching
+- Better partial display
 - Can we morph?
 - Figure out wave -> partial -> wave <-> partial, something about the phasors and inverseFFT I suspect
 - Check this out: https://github.com/Tonejs/Tone.js/blob/c313bc6/Tone/source/oscillator/Oscillator.ts#L315

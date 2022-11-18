@@ -25,8 +25,7 @@
 			fetch('./wave_files/piston_honda_mk3/1.wav')
   				.then(async (response) => {
 					const buffer = await response.arrayBuffer();
-					
-					
+										
 					const wavefile = new WaveFile(new Uint8Array(buffer));										
 					const floatBuffer = wavefile.getSamples(false);
 										
@@ -39,10 +38,8 @@
 						floatArray[i] = floatBuffer[i] / 32768;
 					}	
 					
-					// get a slice of the wave
-					//const wave = floatArray.slice(index * waveLength, (index + 1) * waveLength);
-					const wave = floatArray.slice(index * waveLength, (waveLength * index) + waveLength);
-					console.log(wave);
+					// get a slice of the wave					
+					const wave = floatArray.slice(index * waveLength, (waveLength * index) + waveLength);								
 					bufferOscillator = new BufferOscillator(wave).toDestination();	
 
 				
@@ -116,7 +113,7 @@
 	<button on:click={ randomizePartials }>Randomize partials</button>
 	
 	<div>
-		<!-- <PartialsEditor oscillator={bufferOscillator} on:partialsChanged={ playTone } /> -->
+		<PartialsEditor oscillator={bufferOscillator} on:partialsChanged={ playTone } />
 	</div>
 	<div>
 		<Keyboard osc={bufferOscillator} />

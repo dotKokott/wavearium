@@ -14,19 +14,22 @@
     }
 </script>
 
-<div class="wrapper">
-    {#each oscillator.partials as partial, index}
-        <div class="partial">
-            <div class="partial_label">{`${index}: ${partial.toString().substring(0, 4)}`}</div>
-            <div class="partial_slider">
-                <input type="range" min="0" max="1" step="0.01" value="{partial}" on:input={(e) => {
-                    // TODO: How to get rid of error value does not exist, event typing?                 
-                    changePartial(index, e.target.value);
-                }} />
+{#if oscillator}
+    <div class="wrapper">
+        {#each oscillator.partials.slice(0, 8) as partial, index}
+            <div class="partial">
+                <div class="partial_label">{`${index}: ${partial.toString().substring(0, 4)}`}</div>
+                <div class="partial_slider">
+                    <input type="range" min="0" max="1" step="0.01" value="{partial}" on:input={(e) => {
+                        // TODO: How to get rid of error value does not exist, event typing?                 
+                        changePartial(index, e.target.value);
+                    }} />
+                </div>
             </div>
-        </div>
-    {/each}
-</div>
+        {/each}
+    </div>
+{/if}
+
 
 <style>
     .wrapper {

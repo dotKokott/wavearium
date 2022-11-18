@@ -61,9 +61,7 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
     get buffer() {
         return this._buffer;
     }
-    set buffer(buffer: Float32Array) {
-        console.log(buffer.length)
-        
+    set buffer(buffer: Float32Array) {                
         this._bufferSize = Math.pow(2, Math.ceil(Math.log2(buffer.length)));
         this._originalBufferSize = this._bufferSize;        
         this._buffer = new Float32Array(this._bufferSize);
@@ -82,26 +80,37 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         
         let realPart = [];
         let imgPart = [];
+        
+        const partials = [];
+        for (let i = 0; i < this._bufferSize / 2; i++) {
+            realPart[i] = outputComplex[i * 2];
+            imgPart[i] = outputComplex[i * 2 + 1];
+            partials[i] = Math.sqrt(realPart[i] * realPart[i] + imgPart[i] * imgPart[i]);
+            // what is the difference to this one: partials.push(outputComplex[i] + outputComplex[i + 1]);
 
-        // outputComplex = outputComplex.slice(0, this._originalBufferSize);
-        
-        // DC offset?
-        
-        outputComplex.forEach((v, i) => {
-            if(i % 2 === 0) {
-                realPart.push(v * -1);
-            } else {
-                imgPart.push(v * -1);
-            }
-        })
+            // normalize partials to 0 - 1
+            partials[i] /= this._bufferSize / 2;
+        }
+
+
+        this.partials = partials;
+
+        console.log(this.partials)
+
+        // outputComplex.forEach((v, i) => {
+        //     if(i % 2 === 0) {
+        //         realPart.push(v * -1);
+
+        //     } else {
+        //         imgPart.push(v * -1);
+        //     }
+        // })
+
+        //console.log(realPart.length, imgPart.length)
                
         // TODO: understand why this is still neccessary for a clean waveform
-        // realPart = realPart.slice(0, buffer.length / 2);
-        // imgPart = imgPart.slice(0, buffer.length / 2);
-
-        // this makes it even cleaner but at the cost of accuracy I assume
-        realPart = realPart.slice(0, 64);
-        imgPart = imgPart.slice(0, 64);
+        realPart = realPart.slice(0, buffer.length / 2);
+        imgPart = imgPart.slice(0, buffer.length / 2);
 
 		// const _inverseComplex = this._fft.createComplexArray();
         // this._fft.inverseTransform(_inverseComplex, outputComplex);   
