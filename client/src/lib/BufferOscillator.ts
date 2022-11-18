@@ -52,6 +52,10 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
     private _buffer : Float32Array;
     private _bufferSize = 0;
 
+    get periodicWaveSize(): number {
+        return this._bufferSize / 2;
+    }
+
     private _originalBufferSize = 0;
     
     private _fft = null;
@@ -94,23 +98,10 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 
 
         this.partials = partials;
-
-        console.log(this.partials)
-
-        // outputComplex.forEach((v, i) => {
-        //     if(i % 2 === 0) {
-        //         realPart.push(v * -1);
-
-        //     } else {
-        //         imgPart.push(v * -1);
-        //     }
-        // })
-
-        //console.log(realPart.length, imgPart.length)
                
         // TODO: understand why this is still neccessary for a clean waveform
-        realPart = realPart.slice(0, buffer.length / 2);
-        imgPart = imgPart.slice(0, buffer.length / 2);
+        // realPart = realPart.slice(0, buffer.length / 2);
+        // imgPart = imgPart.slice(0, buffer.length / 2);
 
 		// const _inverseComplex = this._fft.createComplexArray();
         // this._fft.inverseTransform(_inverseComplex, outputComplex);   
@@ -122,9 +113,6 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         //         this._inverse[i] = v;
         //     }            
         // })
-
-        // realPart = realPart.slice(0, this._originalBufferSize / 2);
-
 
         this._wave = this.context.createPeriodicWave(realPart, imgPart);        
     }
