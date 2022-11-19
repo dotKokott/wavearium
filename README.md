@@ -6,6 +6,9 @@ Run `npm run dev` in client folder
 
 ## Next challenges
 - Partial editing feature
+
+	- Started trying the getRealImaginary function, somehow we are missing some parts
+
 - Waveform switching
 - Better partial display
 - Can we morph?

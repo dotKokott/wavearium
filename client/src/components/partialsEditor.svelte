@@ -8,7 +8,7 @@
     const dispatch = createEventDispatcher();   
     
     function changePartial(index : number, value : number) {    
-        oscillator.partials = oscillator.partials.map((partial, i) => i === index ? value : partial);
+        //oscillator.partials = oscillator.partials.map((partial, i) => i === index ? value : partial);
 
         dispatch('partialsChanged');
     }

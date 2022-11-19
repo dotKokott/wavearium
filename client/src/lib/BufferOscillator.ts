@@ -26,6 +26,10 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 	set partials(partials) {
 		this._partials = partials;
 		this._partialCount = this._partials.length;
+
+        const [real, imag] = this._getRealImaginary(this._phase);
+
+        this._wave = this.context.createPeriodicWave(real, imag);
 	}
 
     private _partialCount: number;
@@ -114,36 +118,39 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         //     }            
         // })
 
-        this._wave = this.context.createPeriodicWave(realPart, imgPart);        
+        //this._wave = this.context.createPeriodicWave(realPart, imgPart);        
     }
 
     // When we have the partials, we can use this to generate the buffer
-    // private _getRealImaginary(phase: Radians) : Float32Array[] {
-	// 	// const fftSize = 4096;
-	// 	// let periodicWaveSize = fftSize / 2;
+    private _getRealImaginary(phase: Radians) : Float32Array[] {
+		const fftSize = this._bufferSize;
+		let periodicWaveSize = this.periodicWaveSize;
 
-	// 	const real = new Float32Array(this._bufferSize);
-	// 	const imag = new Float32Array(this._bufferSize);
+		const real = new Float32Array(fftSize);
+		const imag = new Float32Array(fftSize);
         
-    //     this._partialCount = this._bufferSize / 2;
+        this._partialCount = this._bufferSize / 2;
+
+        let partialCount = this.partials.length;
+        periodicWaveSize = partialCount + 1;
+        if(this._partials.length === 0) {
+            return [real, imag];
+        }
+
+        for (let n = 1; n < periodicWaveSize; n++) {
+            const p = this._partials[n - 1];
+            if (p === 0) {
+                real[n] = 0;
+                imag[n] = 0;
+            }
 
 
+            real[n] = -p * Math.sin(phase * n);
+            imag[n] = p * Math.cos(phase * n);
+        }
 
-    //     // const realPart = [];
-    //     // const imgPart = [];
-
-    //     // for(let i = 0; i < this._partialCount; i++) {
-    //     //     const partial = this._partials[i];
-    //     //     const amp = partial / this._partialCount;
-    //     //     const freq = i + 1;
-    //     //     const real = amp * Math.cos(freq * phase);
-    //     //     const img = amp * Math.sin(freq * phase);
-    //     //     realPart.push(real);
-    //     //     imgPart.push(img);
-    //     // }
-
-    //     // return [new Float32Array(realPart), new Float32Array(imgPart)];
-    // }
+        return [real, imag];
+    }
 
     constructor(buffer: Float32Array, frequency?: Frequency) {
         // TODO: understand this options structure
