@@ -229,12 +229,12 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
     }       
     
     asArray(length: number) : Promise<Float32Array> {
+        // TODO: use inverse fft on the real and imaginary part to get the buffer
         return new Promise((resolve, reject) => {
             resolve(this._buffer.slice(0, this._originalBufferSize));
             
         });    
-        
-        
+            
     }    
 
 	dispose(): this {
