@@ -234,7 +234,20 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
             resolve(this._buffer.slice(0, this._originalBufferSize));
             
         });    
+
+        // interesting solutions:
+        // const sampleRate = this.context.sampleRate;
+        // const buffer = new Float32Array(length);
+        // const step = this.frequency.value / sampleRate;
+        // let phase = this.phase;
+        // for (let i = 0; i < length; i++) {
+        //     buffer[i] = this._getRealImaginary(phase)[0][0];
+        //     phase += step;
+        // }
+        // resolve(buffer);        
             
+
+        
     }    
 
 	dispose(): this {
