@@ -30,6 +30,10 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         const [real, imag] = this._getRealImaginary(this._phase);
 
         this._wave = this.context.createPeriodicWave(real, imag);
+
+        if(this._oscillator) {
+            this._oscillator.setPeriodicWave(this._wave);
+        }
 	}
 
     private _partialCount: number;
@@ -90,16 +94,15 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         let imgPart = [];
         
         const partials = [];
-        for (let i = 0; i < this._bufferSize / 2; i++) {
+        for (let i = 0; i < this.periodicWaveSize; i++) {
             realPart[i] = outputComplex[i * 2];
             imgPart[i] = outputComplex[i * 2 + 1];
             partials[i] = Math.sqrt(realPart[i] * realPart[i] + imgPart[i] * imgPart[i]);
             // what is the difference to this one: partials.push(outputComplex[i] + outputComplex[i + 1]);
 
             // normalize partials to 0 - 1
-            partials[i] /= this._bufferSize / 2;
+            partials[i] /= this.periodicWaveSize;
         }
-
 
         this.partials = partials;
                
@@ -122,23 +125,23 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
     }
 
     // When we have the partials, we can use this to generate the buffer
-    private _getRealImaginary(phase: Radians) : Float32Array[] {
+    private _getRealImaginary(phase : number) : Float32Array[] {
 		const fftSize = this._bufferSize;
 		let periodicWaveSize = this.periodicWaveSize;
 
-		const real = new Float32Array(fftSize);
-		const imag = new Float32Array(fftSize);
+		const real = new Float32Array(periodicWaveSize);
+		const imag = new Float32Array(periodicWaveSize);
         
         this._partialCount = this._bufferSize / 2;
 
         let partialCount = this.partials.length;
-        periodicWaveSize = partialCount + 1;
+        periodicWaveSize = partialCount;
         if(this._partials.length === 0) {
             return [real, imag];
         }
 
-        for (let n = 1; n < periodicWaveSize; n++) {
-            const p = this._partials[n - 1];
+        for (let n = 0; n < periodicWaveSize; n++) {
+            const p = this._partials[n];
             if (p === 0) {
                 real[n] = 0;
                 imag[n] = 0;
