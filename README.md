@@ -9,6 +9,7 @@ Run `npm run dev` in client folder
 
 	- Started trying the getRealImaginary function, somehow we are missing some parts
 
+
 - Waveform switching
 - Better partial display
 - Can we morph?
@@ -42,9 +43,7 @@ document.querySelector('button')?.addEventListener('click', async () => {
 
 - How to draw waveform from oscillator: https://github.com/Tonejs/ui/blob/master/src/gui/vis/vis-base.ts#L34
 
-- We are using Oscillator.asArray(resolution) to get the wave values right now, we have to see how this translates to waveform .wav files.
-
-- A waveedit / piston honda wavetable .wav file is 64 waves * 256 samples per wave
+- A waveedit / piston honda wavetable .wav file is 64 waves * 256 samples per wave, 10.000 Hz sample rate and 16 bit per sample
 
 - To go from .wav file to oscillator we need to do the following:
 
@@ -52,13 +51,6 @@ document.querySelector('button')?.addEventListener('click', async () => {
 	2. Do an FFT in order to get the sine and cosine coefficients of the signal, also called real and imaginary values of the periodic waveform
 	3. With the real and img values we can then create a custom oscillator
 
-- fft.js seems to give us the complex numbers we need
-
-	- but it wants the input power of two, can we just scale it up and fill with zeros?	
-
-- I would really like to understand how to make old JS libs work in TS
-
-- Our files are 10.000 Hz sample rate and 16 bit per sample
-- WebAudio resamples the file to its own sample rate: 48.000
+- When an audiofile gets loaded into a buffer WebAudio resamples the file to its own sample rate: 48.000
 
 
