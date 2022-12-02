@@ -5,10 +5,11 @@ WaveEdit like wavetable editor for viewing, searching, creating and collecting o
 Run `npm run dev` in client folder
 
 ## Next challenges
-- Partial editing feature
+- PartialEditing works!
 
-	- Started trying the getRealImaginary function, somehow we are missing some parts
+	- Try if there is a difference when internally it keeps the same amount of partials
 
+- implement asArray for changed partials
 - Waveform switching
 - Better partial display
 - Can we morph?

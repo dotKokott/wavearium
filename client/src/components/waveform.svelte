@@ -22,7 +22,7 @@
     let currentBuffer;
     let fftResult;
     
-    // $: oscillator, redrawWaveform();
+    // $: oscillator?._oscillator, redrawWaveform();
 
     onMount(() => {        
         canvas = document.getElementById('waveform');

@@ -1,6 +1,6 @@
-import { optionsFromArguments, Oscillator, Signal, ToneOscillatorNode, ToneOscillatorType, Unit } from 'tone';
+import { Context, FrequencyUnit, OfflineContext, optionsFromArguments, Oscillator, Signal, ToneOscillatorNode, ToneOscillatorType, Unit } from 'tone';
 import type { Degrees, Frequency, Radians } from 'tone/build/esm/core/type/Units';
-import type { ExtendedToneOscillatorType, ToneOscillatorInterface, ToneOscillatorOptions, generateWaveform } from 'tone/build/esm/source/oscillator/OscillatorInterface';
+import { ExtendedToneOscillatorType, ToneOscillatorInterface, ToneOscillatorOptions, generateWaveform } from 'tone/build/esm/source/oscillator/OscillatorInterface';
 import { Source } from 'tone/build/esm/source/Source';
 
 import FFT from 'fft.js';
@@ -9,7 +9,7 @@ import { readOnly } from 'tone/build/esm/core/util/Interface';
 export class BufferOscillator extends Source<ToneOscillatorOptions> implements ToneOscillatorInterface {
     
     readonly name: string = "BufferOscillator";
-    private _oscillator: ToneOscillatorNode | null = null;
+    _oscillator: ToneOscillatorNode | null = null;
     
     readonly baseType: OscillatorType | 'pulse' | 'pwm' = 'custom';
     readonly type: ExtendedToneOscillatorType = 'custom';
@@ -78,8 +78,6 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         this._originalBufferSize = this._bufferSize;        
         this._buffer = new Float32Array(this._bufferSize);
         this._buffer.set(buffer);                
-
-        const leftover = this._bufferSize - buffer.length;
 
         this._fft = new FFT(this._bufferSize);
 
@@ -155,6 +153,8 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
         return [real, imag];
     }
 
+
+
     constructor(buffer: Float32Array, frequency?: Frequency) {
         // TODO: understand this options structure
         super(optionsFromArguments(Oscillator.getDefaults(), arguments, ["frequency"]));
@@ -226,27 +226,37 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 		}
 		this._state.cancel(computedTime);
 		return this;
-    }       
+    }     
     
+
     asArray(length: number) : Promise<Float32Array> {
         // TODO: use inverse fft on the real and imaginary part to get the buffer
         return new Promise((resolve, reject) => {
-            resolve(this._buffer.slice(0, this._originalBufferSize));
-            
-        });    
+            resolve(this._buffer.slice(0, this._originalBufferSize));            
+        });     
 
-        // interesting solutions:
-        // const sampleRate = this.context.sampleRate;
-        // const buffer = new Float32Array(length);
-        // const step = this.frequency.value / sampleRate;
-        // let phase = this.phase;
-        // for (let i = 0; i < length; i++) {
-        //     buffer[i] = this._getRealImaginary(phase)[0][0];
-        //     phase += step;
+        // let outputComplex = this._fft.createComplexArray();
+        // const [real, imag] = this._getRealImaginary(this.phase);
+
+        // for(let i = 0; i < real.length; i++) {
+        //     outputComplex[i * 2] = real[i];
+        //     outputComplex[i * 2 + 1] = imag[i];
         // }
-        // resolve(buffer);        
-            
 
+        // const _inverseComplex = this._fft.createComplexArray();        
+        // this._fft.inverseTransform(_inverseComplex, outputComplex);
+
+        // const _inverse = new Float32Array(this._bufferSize);
+
+        // _inverseComplex.forEach((v, i) => {
+        //     if(i % 2 === 1) {
+        //         _inverse[i] = v;
+        //     }            
+        // })
+
+        // return new Promise((resolve, reject) => {
+        //     resolve(imag);            
+        // });
         
     }    
 
