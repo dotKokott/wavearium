@@ -156,6 +156,7 @@ export class BufferOscillator extends Source<ToneOscillatorOptions> implements T
 
 
     constructor(buffer: Float32Array, frequency?: Frequency) {
+        console.log("BufferOscillator constructor");
         // TODO: understand this options structure
         super(optionsFromArguments(Oscillator.getDefaults(), arguments, ["frequency"]));
 

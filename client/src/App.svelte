@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-  import { is_client } from 'svelte/internal';
 	import * as Tone from 'tone';	
 	import Keyboard from './components/keyboard.svelte';
 	import PartialsEditor from './components/partialsEditor.svelte';

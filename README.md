@@ -4,24 +4,29 @@ WaveEdit like wavetable editor for viewing, searching, creating and collecting o
 ## How to develop
 Run `npm run dev` in client folder
 
+## UI Requirements v1
+- Load .wav, show all waveforms in .wav in a list
+
 ## Next challenges
-- PartialEditing works!
+### Library / UI
+- Display all waveforms of a file in a list
+- Create UI in figma?
 
-	- Try if there is a difference when internally it keeps the same amount of partials
+	- https://www.figma.com/file/hR8wIx2gBHa7gH3CzqnSO5/Wavearium?node-id=0%3A1&t=tu6pBwZkucqyYxKr-0
 
-- implement asArray for changed partials
 - Waveform switching
-- Better partial display
+- Better partial display / edit
+- More beautiful partial settings (find svelte UI toolkit)
+
+### Audio
+- implement asArray or offline context for changed partials so we can look at the snapshot
 - Can we morph?
 - Figure out wave -> partial -> wave <-> partial, something about the phasors and inverseFFT I suspect
 - Check this out: https://github.com/Tonejs/Tone.js/blob/c313bc6/Tone/source/oscillator/Oscillator.ts#L315
 
 	- Real and img can be calculated easily from partials
-- Why are our buffers so big as opposed to 256?
 - Why can't we set type to 'custom' for the ToneOscillatorNode
 - optional Load wavetable .json from https://github.com/GoogleChromeLabs/web-audio-samples/tree/main/src/demos/wavetable-synth/wave-tables
-- More beautiful partial settings (find svelte UI toolkit)
-- Understand piano css
 
 ## References
 - Wavetable synth from scratch in Rust and WebAssembly: https://cprimozic.net/blog/buliding-a-wavetable-synthesizer-with-rust-wasm-and-webaudio/#demo
