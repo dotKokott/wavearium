@@ -1,44 +1,37 @@
 <script lang=ts>
     import { onMount } from 'svelte';    
-    import * as Tone from 'tone';
     import { scale } from '../lib/utils';
-    import FFT from 'fft.js';
-    import type { BufferOscillator } from '../lib/BufferOscillator';
-  
     
+    export let buffer : Float32Array;
 
     export let width = 512;
     export let height = 256;
     export let normalizeCurve = true;
     export let lineWidth = 2;
-    export let resolution = 1024;
-
-    export let oscillator : BufferOscillator;      
-
+        
     let canvas = null;
-    let ctx = null;
+    let ctx = null;      
     
-    
-    let currentBuffer;
-    let fftResult;
-    
-    // $: oscillator?._oscillator, redrawWaveform();
+    $: buffer, redrawWaveform();
 
-    onMount(() => {        
-        canvas = document.getElementById('waveform');
+    onMount(() => {
+        setupCanvas();
+
+        redrawWaveform();
+    })
+
+    function setupCanvas() {        
         canvas.width = width;
-        canvas.height = height;
+        canvas.height = height;        
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';        
 
-        ctx = canvas.getContext('2d'); 
-        
-        setTimeout(() => {
-            redrawWaveform();
-        }, 1000);
-    });
+        ctx = canvas.getContext('2d');             
+    }
 
     function drawWavetable(values : Float32Array) {
+        if(!ctx) return;
+
         ctx.clearRect(0, 0, width, height)
         const maxValuesLength = 2048;
         if (values.length > maxValuesLength) {
@@ -85,18 +78,13 @@
     }
 
     async function redrawWaveform() {
-        // // TODO: Understand why 1024 in this case is like the resolution rather than sample size
-        const values = await oscillator.asArray(oscillator.buffer.length);
-
-        drawWavetable(values);       
+        console.log('Drawing waveform', buffer);
+        drawWavetable(buffer);       
     }
 </script>
 
 <div class="canvas_wrapper">
-    <canvas id="waveform" width="{width}" height="{height}"></canvas>
-    <pre>
-        
-    </pre>
+    <canvas width="{width}" height="{height}" bind:this={canvas}></canvas>
 </div>
 
 <style>

@@ -1,6 +1,7 @@
 <script lang=ts>
     import { onMount } from "svelte";
     import { BufferOscillator } from "../lib/BufferOscillator";
+  import Waveform from "./waveform.svelte";
 
     export let buffer : Float32Array;
 
@@ -13,8 +14,7 @@
     $: buffer && (oscillator = new BufferOscillator(buffer, frequency));
 
     onMount(() => {
-        console.log('created');
-        // oscillator = new BufferOscillator(buffer, frequency);
+
     })
 
     onresize = () => {
@@ -34,7 +34,7 @@
 </script>
 
 <div on:mousedown={play} on:mouseup={stop} class="waveform_wrapper">
-    <span>I am an oscillator</span>
+    <Waveform buffer={buffer} />
 </div>
 
 <style>
