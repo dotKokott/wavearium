@@ -120,8 +120,7 @@
 	<div>
 		<OutputWaveform node={bufferOscillator} width={1024} height={1024 / 2}></OutputWaveform>
 	</div>	
-	<div>
-		<Waveform oscillator={bufferOscillator} width={1024} height={1024 / 2}></Waveform>
+	<div>		
 	</div>
 
 </main>

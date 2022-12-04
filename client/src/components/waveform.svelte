@@ -3,11 +3,10 @@
     import { scale } from '../lib/utils';
     
     export let buffer : Float32Array;
-
-    export let width = 512;
-    export let height = 256;
+    
     export let normalizeCurve = true;
     export let lineWidth = 2;
+    export let lineColor = "#ff66b3";
         
     let canvas = null;
     let ctx = null;      
@@ -15,24 +14,28 @@
     $: buffer, redrawWaveform();
 
     onMount(() => {
-        setupCanvas();
+        const resizeObserver = new ResizeObserver(() => {            
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+
+            console.log('Resize')
+        });
+
+        ctx = canvas.getContext('2d');         
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;                 
 
         redrawWaveform();
+
+        return () => {
+            resizeObserver.disconnect();
+        }
     })
-
-    function setupCanvas() {        
-        canvas.width = width;
-        canvas.height = height;        
-        canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';        
-
-        ctx = canvas.getContext('2d');             
-    }
 
     function drawWavetable(values : Float32Array) {
         if(!ctx) return;
 
-        ctx.clearRect(0, 0, width, height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
         const maxValuesLength = 2048;
         if (values.length > maxValuesLength) {
             const resampled = new Float32Array(maxValuesLength);
@@ -63,8 +66,8 @@
         for (let i = 0; i < values.length; i++) {
             const v = values[i];
             // scaling from minArray to maxArray to minCanvas to maxCanvas
-            const x = scale(i, 0, values.length, lineWidth, width - lineWidth);
-            const y = scale(v, max, min, 0, height - lineWidth);
+            const x = scale(i, 0, values.length, lineWidth, canvas.width - lineWidth);
+            const y = scale(v, max, min, 0, canvas.height - lineWidth);
             if (i === 0) {
                 ctx.moveTo(x, y);
             } else {
@@ -73,23 +76,25 @@
 		}
 
         ctx.lineCap = "round";
-        ctx.strokeStyle = "lime";
+        ctx.strokeStyle = lineColor;
         ctx.stroke();		      
     }
 
     async function redrawWaveform() {
-        console.log('Drawing waveform', buffer);
         drawWavetable(buffer);       
     }
 </script>
 
-<div class="canvas_wrapper">
-    <canvas width="{width}" height="{height}" bind:this={canvas}></canvas>
+<div class={`canvas_wrapper ${$$props.class}`}>
+    <canvas bind:this={canvas}></canvas>
 </div>
 
 <style>
+    .canvas_wrapper {
+        border: 1px solid black;
+        height: 500px;
+    }
     canvas {
-        background-color: black;
-        border: 1px solid lime;
+        border: 1px solid #ff66b3;
     }    
 </style>

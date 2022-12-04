@@ -1,7 +1,7 @@
 <script lang=ts>
     import { onMount } from "svelte";
     import { BufferOscillator } from "../lib/BufferOscillator";
-  import Waveform from "./waveform.svelte";
+    import Waveform from "./waveform.svelte";
 
     export let buffer : Float32Array;
 
@@ -34,11 +34,16 @@
 </script>
 
 <div on:mousedown={play} on:mouseup={stop} class="waveform_wrapper">
-    <Waveform buffer={buffer} />
+    <Waveform class="waveform" buffer={buffer} />
 </div>
 
 <style>
     .waveform_wrapper {
-        border: 1px solid black;
+        border: 1px solid black;        
     }    
+
+    .waveform {
+        width: 100px;
+        height: 100px;
+    }
 </style>

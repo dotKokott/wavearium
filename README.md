@@ -9,7 +9,8 @@ Run `npm run dev` in client folder
 
 ## Next challenges
 ### Library / UI
-- Display all waveforms of a file in a list
+- Put waveforms into a scroll container
+- Make sizing dynamic -> Figure out how to pass down class in svelete properly and make the canvas react to it
 - Create UI in figma?
 
 	- https://www.figma.com/file/hR8wIx2gBHa7gH3CzqnSO5/Wavearium?node-id=0%3A1&t=tu6pBwZkucqyYxKr-0
