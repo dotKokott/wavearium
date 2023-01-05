@@ -92,7 +92,7 @@
 <style>
     .canvas_wrapper {
         border: 1px solid black;
-        height: 500px;
+        
     }
     canvas {
         border: 1px solid #ff66b3;

@@ -9,7 +9,6 @@ Run `npm run dev` in client folder
 
 ## Next challenges
 ### Library / UI
-- Put waveforms into a scroll container
 - Make sizing dynamic -> Figure out how to pass down class in svelete properly and make the canvas react to it
 
 	- https://stackoverflow.com/questions/67049219/class-styling-on-a-custom-component-in-svelte-does-not-register

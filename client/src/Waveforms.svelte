@@ -36,9 +36,9 @@
     })
 </script>
 
-<main class="waveforms">    
-    <div>
-        {#each buffers as buffer}
+<main class="">    
+    <div class="waveforms">
+        {#each buffers as buffer}            
             <PlayableWaveform buffer={buffer} />
         {/each}
     </div>
@@ -61,7 +61,14 @@
         font: 'Arial';
 		background-color: #3c3744;
 		color: white;
-		height: 100%;
+		height: 100%;        
 		text-align: center;		
 	}
+
+    .waveforms {
+        width: 25%;
+        height: 100%;
+        overflow: auto;
+  
+    }
 </style>
