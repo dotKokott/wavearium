@@ -9,6 +9,7 @@ Run `npm run dev` in client folder
 
 ## Next challenges
 ### Library / UI
+- Add params like frequency and morph
 - Make sizing dynamic -> Figure out how to pass down class in svelete properly and make the canvas react to it
 
 	- https://stackoverflow.com/questions/67049219/class-styling-on-a-custom-component-in-svelte-does-not-register
